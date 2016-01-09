@@ -5,7 +5,16 @@ import unittest
 from boil import *
 
 
+def del_if_exists(filename):
+    if os.isfile(filename):
+        os.remove(filename)
+
+
 class BoilTests(unittest.TestCase):
+
+    def tearDown(self):
+        del_if_exists('test1.txt')
+        del_if_exists('test2.txt')
 
     def test_repo_exists(self):
         repos = [

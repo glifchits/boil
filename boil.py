@@ -1,4 +1,5 @@
 import io
+import os
 import sys
 import shutil
 import zipfile
@@ -39,11 +40,18 @@ def get_master_zipfile(github_repo):
 def dump_zip_contents_into_cwd(zipball):
     tmp = './tmp'
     zipball.extractall(tmp)
-    walk = os.walk(tmp)
-    _, subfolders, _ = next(walk)
+    walk_zip = os.walk(tmp)
+    _, subfolders, _ = next(walk_zip)
     folder = subfolders[0]
-    walk = os.walk(os.path.join(tmp, folder))
     # copy files from inside this walk to the cwd
+    walk_subfolder = os.walk(os.path.join(tmp, folder))
+    rootfolder, boilerplate_folders, boilerplate_files = next(walk_subfolder)
+    for folder in boilerplate_folders:
+        folderpath = os.path.join(rootfolder, folder)
+        shutil.copytree(folderpath, os.getcwd())
+    for f in boilerplate_files:
+        filepath = os.path.join(rootfolder, f)
+        shutil.copy(filepath, os.getcwd())
     shutil.rmtree(tmp)
 
 
