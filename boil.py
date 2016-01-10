@@ -5,6 +5,8 @@ import shutil
 import zipfile
 import requests
 
+tmp = './tmp'
+
 
 def exit(msg, code=1):
     sys.stderr.write("{}\n".format(msg))
@@ -34,7 +36,7 @@ def get_master_zipfile(github_repo):
 
 
 def dump_zip_contents_into_cwd(zipball):
-    tmp = './tmp'
+    cwd = os.getcwd()
     zipball.extractall(tmp)
     walk_zip = os.walk(tmp)
     _, subfolders, _ = next(walk_zip)
@@ -43,11 +45,13 @@ def dump_zip_contents_into_cwd(zipball):
     walk_subfolder = os.walk(os.path.join(tmp, folder))
     rootfolder, boilerplate_folders, boilerplate_files = next(walk_subfolder)
     for folder in boilerplate_folders:
-        folderpath = os.path.join(rootfolder, folder)
-        shutil.copytree(folderpath, os.getcwd())
+        srcfolderpath = os.path.join(cwd, rootfolder, folder)
+        destfolderpath = os.path.join(cwd, folder)
+        shutil.copytree(srcfolderpath, destfolderpath)
     for f in boilerplate_files:
-        filepath = os.path.join(rootfolder, f)
-        shutil.copy(filepath, os.getcwd())
+        srcfilepath = os.path.join(cwd, rootfolder, f)
+        destfilepath = os.path.join(cwd, f)
+        shutil.copy(srcfilepath, destfilepath)
     shutil.rmtree(tmp)
 
 
@@ -61,4 +65,6 @@ if __name__ == "__main__":
         tempzip = get_master_zipfile(github)
         dump_zip_contents_into_cwd(tempzip)
     except Exception as e:
+        if os.path.isdir(tmp):
+            shutil.rmtree(tmp)
         exit(str(e))
