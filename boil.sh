@@ -4,6 +4,13 @@ function boil ()
   tmp="tmpzip"
   tmpzip="tmp.zip"
 
+  if [[ $REPO =~ ^[[:alnum:]]+/[[:alnum:]]+$ ]]; then
+  else
+    echo "Usage: $0 [github repo]"
+    echo "  [github repo] is of the format {username}/{repository}"
+    return
+  fi
+
   # download the repo master as zip file
   zipurl="https://github.com/$REPO/archive/master.zip"
   echo "Downloading $REPO:master"
