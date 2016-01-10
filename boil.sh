@@ -4,7 +4,7 @@ function boil ()
   tmp="tmpzip"
   tmpzip="tmp.zip"
 
-  if [[ $REPO =~ ^[[:alnum:]]+/[[:alnum:]]+$ ]]; then
+  if [[ $REPO =~ ^[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+$ ]]; then
   else
     echo "Usage: $0 [github repo]"
     echo "  [github repo] is of the format {username}/{repository}"
