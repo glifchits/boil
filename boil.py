@@ -26,12 +26,8 @@ def get_master_zipfile(github_repo):
     """
     :returns: [zip file]
     """
-    releases_url = "https://api.github/repos/{}/releases/latest"
-    r = requests.get(releases_url)
-    zipball_url = r.json().get('zipball_url', None)
-    if zipball_url is None:
-        raise ValueError("Couldn't get zipball url")
-    z = requests.get(zipball_url)
+    zip_url = "https://github.com/{}/archive/master.zip".format(github_repo)
+    z = requests.get(zip_url)
     assert z.ok, "Downloading zipball was not ok"
     zipball = zipfile.ZipFile(io.BytesIO(z.content))
     return zipball
