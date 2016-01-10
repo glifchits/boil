@@ -6,7 +6,7 @@ from boil import *
 
 
 def del_if_exists(filename):
-    if os.isfile(filename):
+    if os.path.isfile(filename):
         os.remove(filename)
 
 
