@@ -1,7 +1,7 @@
 function boil ()
 {
   REPO=$1
-  tmp="tmpzip"
+  tmp="__tmpzip"
   tmpzip="tmp.zip"
 
   if [[ $REPO =~ ^[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+$ ]]; then
@@ -23,8 +23,8 @@ function boil ()
   # get name of the internal folder
   folder=$(ls $tmp)
 
-  for obj in $( ls "$tmp/$folder" ); do
-    cp -R "$tmp/$folder/$obj" .
+  for obj in $( find $tmp/$folder -maxdepth 1 ); do
+    cp -R $obj .
   done
 
   echo "done. cleaning up"
